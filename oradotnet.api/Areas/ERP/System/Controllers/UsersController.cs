@@ -62,7 +62,7 @@ namespace oradotnet.api.Controllers
             if (ModelState.IsValid && usr != null)
             {
                 string strQry = "";
-                _user_service.CreateUser(strQry, usr.SYS_USR_ID, usr.UserName, usr.Password);
+                //_user_service.CreateUser(strQry, usr.SYS_USR_ID, usr.UserName, usr.Password);
 
                 return CreatedAtAction(nameof(GetById), new { id = usr.SYS_USR_ID }, usr);
             }
@@ -81,12 +81,12 @@ namespace oradotnet.api.Controllers
 
             if (ModelState.IsValid && usr != null)
             {
-                string strQry = "UPDATE CM_SYSTEM_USERS SET " +  // 
-                   " taskName= '" + usr.taskName + "', taskImage='" + usr.taskImage + "'," +
-                   "  WHERE UserName='" + usr.UserName + "'  ";
+                //string strQry = "UPDATE CM_SYSTEM_USERS SET " +  // 
+                //   " taskName= '" + usr.taskName + "', taskImage='" + usr.taskImage + "'," +
+                //   "  WHERE UserName='" + usr.UserName + "'  ";
 
 
-                _user_service.ExecuteUser(strQry);
+                //_user_service.ExecuteUser(strQry);
 
                 return CreatedAtAction(nameof(GetById), new { id = usr.SYS_USR_ID }, usr);
             }
@@ -102,20 +102,20 @@ namespace oradotnet.api.Controllers
         [HttpPut("{id}")]
         public ActionResult Put(string id, [FromBody] CM_SYSTEM_USERS usr)
         {
-            if (ModelState.IsValid && usr != null && id == usr.SYS_USR_ID)
-            {
-                string strQry = "UPDATE CM_SYSTEM_USERS SET " +  // 
-                    " SYS_USR_LOGIN_NAME= '" + usr.UserName + "', SYS_USR_PASS='" + usr.Password + "'," +
-                    " SYS_USR_DNAME='" + usr.SYS_USR_DNAME + "' , SYS_USR_EMAIL ='" + usr.SYS_USR_EMAIL + "' WHERE SYS_USR_ID='" + usr.SYS_USR_ID + "'  ";
+            //if (ModelState.IsValid && usr != null && id == usr.SYS_USR_ID)
+            //{
+            //    string strQry = "UPDATE CM_SYSTEM_USERS SET " +  // 
+            //        " SYS_USR_LOGIN_NAME= '" + usr.UserName + "', SYS_USR_PASS='" + usr.Password + "'," +
+            //        " SYS_USR_DNAME='" + usr.SYS_USR_DNAME + "' , SYS_USR_EMAIL ='" + usr.SYS_USR_EMAIL + "' WHERE SYS_USR_ID='" + usr.SYS_USR_ID + "'  ";
 
-                 _user_service.ExecuteUser(strQry);
+            //     _user_service.ExecuteUser(strQry);
 
-                return NoContent();
-            }
-            else
-            {
+            //    return NoContent();
+            //}
+            //else
+            //{
                 return BadRequest();
-            }
+            //}
         }
 
         // DELETE api/<controller>/5

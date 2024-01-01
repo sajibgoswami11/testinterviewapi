@@ -13,16 +13,13 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
 {
     public class UserService : IUserService
     {
-        private readonly string _conString;
+
         //public CM_SYSTEM_USERS AddUser(CM_SYSTEM_USERS _users)
         //{
         //    _systemusers.Add(_users);
         //    return _users;
         //}
-        public UserService()
-        {
-            _conString = AppSettings.ConString;
-        }
+
         public List<CM_SYSTEM_USERS> GetUsers()
         {
             var dataList = new List<CM_SYSTEM_USERS>();
@@ -35,7 +32,7 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
             //}
             #endregion
 
-            using (IDbConnection db = new SqlConnection(_conString))
+            using (IDbConnection db = new SqlConnection(ConString))
             {
 
                 dataList = db.Query<CM_SYSTEM_USERS>("select * from CM_SYSTEM_USERS").ToList();
@@ -47,7 +44,7 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
         public List<CM_SYSTEM_USERS> GetUserById(string id, string pass)
         {
             var dataList = new List<CM_SYSTEM_USERS>();
-            using (IDbConnection db = new SqlConnection(_conString))
+            using (IDbConnection db = new SqlConnection(ConString))
             {
 
                 string strQry = "SELECT * from CM_SYSTEM_USERS where UserName ='" + id + "' " +
@@ -62,7 +59,7 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
         public bool ExecuteUser(string strQry)
         {
             var IsSaved = false;
-            using (IDbConnection db = new SqlConnection(_conString))
+            using (IDbConnection db = new SqlConnection(ConString))
             {
                 IsSaved = db.Execute(strQry) > 0;
             }
@@ -72,7 +69,7 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
         }
         public int CreateUser(string strQry, string userId, string name, string pass)
         {
-            using (IDbConnection db = new SqlConnection(_conString))
+            using (IDbConnection db = new SqlConnection(ConString))
             {
                 strQry = "INSERT INTO CM_SYSTEM_USERS (SYS_USR_ID, UserName, Password, SYS_USR_EMAIL ) " +
                 "VALUES (@SYS_USR_ID,@UserName, @Password , @SYS_USR_EMAIL )";
@@ -84,15 +81,16 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
                 {
                     SYS_USR_ID = userId,
                     UserName = name,
-                    @SYS_USR_EMAIL="sds",
+                    @SYS_USR_EMAIL = "sds",
                     Password = pass
 
-                } );
+                });
                 return IsSaved;
-             }
+            }
         }
         //string cn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         //private static string ConString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)));User Id =hr; Password =s; ";
+        private static string ConString = "Server=(local)\\sqlexpress; Database=UserDB; Trusted_Connection=True; MultipleActiveResultSets=True;";
         #region authentication
         #endregion
     }
