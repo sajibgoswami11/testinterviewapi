@@ -1,13 +1,11 @@
 ﻿using Dapper;
-using Oracle.ManagedDataAccess.Client;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using System.Data;
-using System.Configuration;
 using System.Data.SqlClient;
 using oradotnet.api.Areas.ERP.System.Models;
+using Microsoft.Data.Sqlite;
+using System.IO;
 
 namespace oradotnet.api.Areas.ERP.System.Repositroy
 {
@@ -32,7 +30,7 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
             //}
             #endregion
 
-            using (IDbConnection db = new SqlConnection(ConString))
+            using (IDbConnection db = new SqliteConnection(ConString))
             {
 
                 dataList = db.Query<CM_SYSTEM_USERS>("select * from CM_SYSTEM_USERS").ToList();
@@ -41,10 +39,11 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
 
             return dataList;
         }
+
         public List<CM_SYSTEM_USERS> GetUserById(string id, string pass)
         {
             var dataList = new List<CM_SYSTEM_USERS>();
-            using (IDbConnection db = new SqlConnection(ConString))
+            using (IDbConnection db = new SqliteConnection(ConString))
             {
 
                 string strQry = "SELECT * from CM_SYSTEM_USERS where UserName ='" + id + "' " +
@@ -59,7 +58,7 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
         public bool ExecuteUser(string strQry)
         {
             var IsSaved = false;
-            using (IDbConnection db = new SqlConnection(ConString))
+            using (IDbConnection db = new SqliteConnection(ConString))
             {
                 IsSaved = db.Execute(strQry) > 0;
             }
@@ -88,9 +87,11 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
                 return IsSaved;
             }
         }
+        public readonly static string ConString = "Data Source='" + Path.Combine(Directory.GetCurrentDirectory() + @"\\portfolio.db") + "' ";
+
         //string cn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         //private static string ConString = "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)));User Id =hr; Password =s; ";
-        private static string ConString = "Server=(local)\\sqlexpress; Database=UserDB; Trusted_Connection=True; MultipleActiveResultSets=True;";
+        //private static string ConString = "Server=(local)\\sqlexpress; Database=UserDB; Trusted_Connection=True; MultipleActiveResultSets=True;";
         #region authentication
         #endregion
     }

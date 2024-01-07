@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -22,12 +21,13 @@ namespace oradotnet.api.Areas.ERP.System.Controllers
         private readonly IRepository<CM_SYSTEM_USERS> _loginService;
 
         private readonly AppSettings _appSettings;
+        public IConfiguration Configuration { get; }
 
-        public LoginController(IOptions<AppSettings> appSettings,IRepository<CM_SYSTEM_USERS> loginRepos)
+        public LoginController(IOptions<AppSettings> appSettings,IRepository<CM_SYSTEM_USERS> loginRepos, IConfiguration configuration)
         {
             _loginService = loginRepos;
             _appSettings = appSettings.Value;
-
+            Configuration = configuration;
 
         }
 
@@ -59,7 +59,7 @@ namespace oradotnet.api.Areas.ERP.System.Controllers
                
                 //User Found
                 var tokenHandlar = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Key);
+                var key = Encoding.ASCII.GetBytes(Configuration.GetConnectionString("Key"));
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]

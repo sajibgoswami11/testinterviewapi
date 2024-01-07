@@ -39,12 +39,11 @@ namespace oradotnet.api
             //services.AddSingleton<ILogin, Login>();
             services.AddScoped<IRepository<CM_SYSTEM_USERS>, Repository<CM_SYSTEM_USERS>>();
 
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
+            var appSettingsSection = Configuration.GetConnectionString("Key");
+          //  services.Configure<AppSettings>(appSettingsSection);
 
             //JWT Authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Key);
+            var key = Encoding.ASCII.GetBytes(appSettingsSection.ToString());
 
 
             services.AddAuthentication(au =>
@@ -55,7 +54,7 @@ namespace oradotnet.api
             {
                 jwt.RequireHttpsMetadata = false;
                 jwt.SaveToken = true;
-                jwt.TokenValidationParameters = new TokenValidationParameters
+                jwt.TokenValidationParameters = new TokenValidationParameters   
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -92,6 +91,7 @@ namespace oradotnet.api
                 }
                 });
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -125,5 +125,6 @@ namespace oradotnet.api
                 endpoints.MapControllers();
             });
         }
+
     }
 }

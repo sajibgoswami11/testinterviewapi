@@ -27,8 +27,10 @@ namespace oradotnet.api.Areas.ERP.System.Repositroy
 
 
     }
+
     public class AppSettings
     {
         public string Key { get; set; }
     }
+
 }
